@@ -4,6 +4,8 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.2
 
+import { Response } from 'node-fetch';
+
 export namespace factories {
     class ApplicationFactory extends ModelResolutionFactory {
         getMapping(): {
@@ -62,9 +64,9 @@ export namespace models {
         visibility: ApplicationVisibility;
         constructor(resourceJson: any, client: Client);
         update(): Promise<Resource | ModelResolutionFactory>;
-        delete(): Request;
-        activate(): Request;
-        deactivate(): Request;
+        delete(): Promise<Response>;
+        activate(): Promise<Response>;
+        deactivate(): Promise<Response>;
         listApplicationUsers(queryParameters?: any): Collection;
         assignUserToApplication(appUser: AppUser): Promise<AppUser>;
         getApplicationUser(userId: string, queryParameters: any): Promise<AppUser>;
@@ -118,7 +120,7 @@ export namespace models {
         priority: number;
         profile: UserProfile;
         constructor(resourceJson: any, client: Client);
-        delete(appId: string): Request;
+        delete(appId: string): Promise<Response>;
     }
     class ApplicationLicensing extends Resource {
         seatCount: number;
@@ -299,7 +301,7 @@ export namespace models {
         status: FactorStatus;
         userId: string;
         constructor(resourceJson: any, client: Client);
-        delete(userId: string): Request;
+        delete(userId: string): Promise<Response>;
         activate(userId: string, verifyFactorRequest: VerifyFactorRequest): Promise<Factor>;
         verify(userId: string, verifyFactorRequest: VerifyFactorRequest, queryParameters: any): Promise<VerifyFactorResponse>;
     }
@@ -334,8 +336,8 @@ export namespace models {
         type: string;
         constructor(resourceJson: any, client: Client);
         update(): Promise<Group>;
-        delete(): Request;
-        removeUser(userId: string): Request;
+        delete(): Promise<Response>;
+        removeUser(userId: string): Promise<Response>;
         listUsers(queryParameters: any): Collection;
     }
     class GroupProfile extends Resource {
@@ -354,9 +356,9 @@ export namespace models {
         type: string;
         constructor(resourceJson: any, client: Client);
         update(): Promise<GroupRule>;
-        delete(queryParameters: any): Request;
-        activate(): Request;
-        deactivate(): Request;
+        delete(queryParameters: any): Promise<Response>;
+        activate(): Promise<Response>;
+        deactivate(): Promise<Response>;
     }
     class GroupRuleAction extends Resource {
         assignUserToGroups: GroupRuleGroupAssignment;
@@ -406,20 +408,22 @@ export namespace models {
         constructor(resourceJson: any, client: Client);
     }
     class JsonWebKey extends Resource {
-        alg: string;
-        created: Date;
-        e: string;
-        expiresAt: Date;
-        key_ops: string[];
-        kid: string;
+        [key: string]: any;
         kty: string;
-        lastUpdated: Date;
-        n: string;
+        use?: string;
+        key_ops?: string[];
+        alg?: string;
+        kid?: string;
+        x5u?: string;
+        x5c?: string[];
+        x5t?: string;
+        'x5t#S256': string;
+        n?: string;
+        e?: string;
+        created: Date;
+        expiresAt: Date;
+        lastUpdated?: Date;
         status: string;
-        use: string;
-        x5c: string[];
-        x5t: string;
-        x5u: string;
         constructor(resourceJson: any, client: Client);
     }
     class OAuthApplicationCredentials extends ApplicationCredentials {
@@ -600,7 +604,7 @@ export namespace models {
         status: SessionStatus;
         userId: string;
         constructor(resourceJson: any, client: Client);
-        delete(): Request;
+        delete(): Promise<Response>;
         refresh(): Promise<Session>;
     }
     class SessionAuthenticationMethod extends Resource {
@@ -697,28 +701,28 @@ export namespace models {
         transitioningToStatus: UserStatus;
         constructor(resourceJson: any, client: Client);
         update(): Promise<User>;
-        delete(): Request;
-        endAllSessions(queryParameters: any): Request;
+        delete(): Promise<Response>;
+        endAllSessions(queryParameters: any): Promise<Response>;
         listAppLinks(queryParameters: any): Collection;
         changePassword(changePasswordRequest: ChangePasswordRequest): Promise<UserCredentials>;
         changeRecoveryQuestion(userCredentials: UserCredentials): Promise<UserCredentials>;
         forgotPassword(userCredentials: UserCredentials, queryParameters: any): Promise<ForgotPasswordResponse>;
         listRoles(queryParameters: any): Collection;
         addRole(role: Role): Promise<Role>;
-        removeRole(roleId: string): Request;
+        removeRole(roleId: string): Promise<Response>;
         listGroupTargetsForRole(roleId: string, queryParameters: any): Collection;
-        removeGroupTargetFromRole(roleId: string, groupId: string): Request;
-        addGroupTargetToRole(roleId: string, groupId: string): Request;
+        removeGroupTargetFromRole(roleId: string, groupId: string): Promise<Response>;
+        addGroupTargetToRole(roleId: string, groupId: string): Promise<Response>;
         listGroups(queryParameters: any): Collection;
         activate(queryParameters: any): Promise<UserActivationToken>;
-        deactivate(): Request;
-        suspend(): Request;
-        unsuspend(): Request;
+        deactivate(): Promise<Response>;
+        suspend(): Promise<Response>;
+        unsuspend(): Promise<Response>;
         resetPassword(queryParameters: any): Promise<ResetPasswordToken>;
         expirePassword(queryParameters: any): Promise<TempPassword>;
-        unlock(): Request;
-        resetFactors(): Request;
-        addToGroup(groupId: string): Request;
+        unlock(): Promise<Response>;
+        resetFactors(): Promise<Response>;
+        addToGroup(groupId: string): Promise<Response>;
         addFactor(factor: Factor, queryParameters: any): Promise<Factor>;
         listSupportedFactors(): Collection;
         listFactors(): Collection;
@@ -870,7 +874,7 @@ export class GeneratedApiClient {
      * @description
      * Removes an inactive application.
      */
-    deleteApplication(appId: string): Request;
+    deleteApplication(appId: string): Promise<Response>;
     /**
      *
      * @description
@@ -894,19 +898,19 @@ export class GeneratedApiClient {
      * @description
      * Generates a new X.509 certificate for an application key credential
      */
-    generateApplicationKey(appId: string, queryParameters?: any): Promise<JsonWebKey>;
+    generateApplicationKey(appId: string, queryParameters?: any): Promise<models.JsonWebKey>;
     /**
      *
      * @description
      * Gets a specific [application key credential](#application-key-credential-model) by `kid`
      */
-    getApplicationKey(appId: string, keyId: string): Promise<JsonWebKey>;
+    getApplicationKey(appId: string, keyId: string): Promise<models.JsonWebKey>;
     /**
      *
      * @description
      * Clones a X.509 certificate for an application key credential from a source application to target application.
      */
-    cloneApplicationKey(appId: string, keyId: string, queryParameters?: any): Promise<JsonWebKey>;
+    cloneApplicationKey(appId: string, keyId: string, queryParameters?: any): Promise<models.JsonWebKey>;
     /**
      *
      * @description
@@ -918,7 +922,7 @@ export class GeneratedApiClient {
      * @description
      * Removes a group assignment from an application.
      */
-    deleteApplicationGroupAssignment(appId: string, groupId: string): Request;
+    deleteApplicationGroupAssignment(appId: string, groupId: string): Promise<Response>;
     /**
      *
      * @description
@@ -936,13 +940,13 @@ export class GeneratedApiClient {
      * @description
      * Activates an inactive application.
      */
-    activateApplication(appId: string): Request;
+    activateApplication(appId: string): Promise<Response>;
     /**
      *
      * @description
      * Deactivates an active application.
      */
-    deactivateApplication(appId: string): Request;
+    deactivateApplication(appId: string): Promise<Response>;
     /**
      *
      * @description
@@ -962,7 +966,7 @@ export class GeneratedApiClient {
      * @description
      * Removes an assignment for a user from an application.
      */
-    deleteApplicationUser(appId: string, userId: string): Request;
+    deleteApplicationUser(appId: string, userId: string): Promise<Response>;
     /**
      *
      * @description
@@ -1001,7 +1005,7 @@ export class GeneratedApiClient {
      * @description
      * Removes a specific group rule by id from your organization
      */
-    deleteRule(ruleId: string, queryParameters?: any): Request;
+    deleteRule(ruleId: string, queryParameters?: any): Promise<Response>;
     /**
      *
      * @description
@@ -1019,19 +1023,19 @@ export class GeneratedApiClient {
      * @description
      * Activates a specific group rule by id from your organization
      */
-    activateRule(ruleId: string): Request;
+    activateRule(ruleId: string): Promise<Response>;
     /**
      *
      * @description
      * Deactivates a specific group rule by id from your organization
      */
-    deactivateRule(ruleId: string): Request;
+    deactivateRule(ruleId: string): Promise<Response>;
     /**
      *
      * @description
      * Removes a group with `OKTA_GROUP` type from your organization.
      */
-    deleteGroup(groupId: string): Request;
+    deleteGroup(groupId: string): Promise<Response>;
     /**
      *
      * @description
@@ -1055,13 +1059,13 @@ export class GeneratedApiClient {
      * @description
      * Removes a [user](users.html#user-model) from a group with `OKTA_GROUP` type.
      */
-    removeGroupUser(groupId: string, userId: string): Request;
+    removeGroupUser(groupId: string, userId: string): Promise<Response>;
     /**
      *
      * @description
      * Adds a [user](users.html#user-model) to a group with `OKTA_GROUP` type.
      */
-    addUserToGroup(groupId: string, userId: string): Request;
+    addUserToGroup(groupId: string, userId: string): Promise<Response>;
     /**
      * @description
      * Creates a new session for a user with a valid session token.
@@ -1074,7 +1078,7 @@ export class GeneratedApiClient {
      * @description
      * Convenience method for /api/v1/sessions/{sessionId}
      */
-    endSession(sessionId: string): Request;
+    endSession(sessionId: string): Promise<Response>;
     /**
      *
      * @description
@@ -1103,7 +1107,7 @@ export class GeneratedApiClient {
      * Deletes a user permanently.
      * This operation can only be performed on users that have a `DEPROVISIONED` status.  **This action cannot be recovered!**
      */
-    deactivateOrDeleteUser(userId: string): Request;
+    deactivateOrDeleteUser(userId: string): Promise<Response>;
     /**
      * @description
      * Fetches a user from your Okta organization.
@@ -1165,7 +1169,7 @@ export class GeneratedApiClient {
      * @description
      * Unenrolls an existing factor for the specified user, allowing the user to enroll a new factor.
      */
-    deleteFactor(userId: string, factorId: string): Request;
+    deleteFactor(userId: string, factorId: string): Promise<Response>;
     /**
      * @description
      * Fetches a factor for the specified user
@@ -1201,7 +1205,7 @@ export class GeneratedApiClient {
      * property with a value of `DEPROVISIONED` during deactivation to indicate that the user hasn't completed the asynchronous operation.
      * The user will have a status of `DEPROVISIONED` when the deactivation process is complete.
      */
-    deactivateUser(userId: string): Request;
+    deactivateUser(userId: string): Promise<Response>;
     /**
      * @description
      * This operation transitions the user to the status of `PASSWORD_EXPIRED` so that the user is required to change
@@ -1214,7 +1218,7 @@ export class GeneratedApiClient {
      * to the unenrolled state. The user's status remains ACTIVE. This link is present only
      * if the user is currently enrolled in one or more MFA factors.
      */
-    resetAllFactors(userId: string): Request;
+    resetAllFactors(userId: string): Promise<Response>;
     /**
      * @description
      * Generates a one-time token (OTT) that can be used to reset a user's password.
@@ -1226,19 +1230,19 @@ export class GeneratedApiClient {
      * Suspends a user.  This operation can only be performed on users with an `ACTIVE` status.
      * The user will have a status of `SUSPENDED` when the process is complete.
      */
-    suspendUser(userId: string): Request;
+    suspendUser(userId: string): Promise<Response>;
     /**
      * @description
      * Unlocks a user with a `LOCKED_OUT` status and returns them to `ACTIVE` status.
      * Users will be able to login with their current password.
      */
-    unlockUser(userId: string): Request;
+    unlockUser(userId: string): Promise<Response>;
     /**
      * @description
      * Unsuspends a user and returns them to the `ACTIVE` state.
      * This operation can only be performed on users that have a `SUSPENDED` status.
      */
-    unsuspendUser(userId: string): Request;
+    unsuspendUser(userId: string): Promise<Response>;
     /**
      * @description
      * Lists all roles assigned to a user.
@@ -1253,7 +1257,7 @@ export class GeneratedApiClient {
      * @description
      * Unassigns a role from a user.
      */
-    removeRoleFromUser(userId: string, roleId: string): Request;
+    removeRoleFromUser(userId: string, roleId: string): Promise<Response>;
     /**
      * @description
      * Convenience method for /api/v1/users/{userId}/roles/{roleId}/targets/groups
@@ -1263,18 +1267,18 @@ export class GeneratedApiClient {
      * @description
      * Convenience method for /api/v1/users/{userId}/roles/{roleId}/targets/groups/{groupId}
      */
-    removeGroupTargetFromRole(userId: string, roleId: string, groupId: string): Request;
+    removeGroupTargetFromRole(userId: string, roleId: string, groupId: string): Promise<Response>;
     /**
      * @description
      * Convenience method for /api/v1/users/{userId}/roles/{roleId}/targets/groups/{groupId}
      */
-    addGroupTargetToRole(userId: string, roleId: string, groupId: string): Request;
+    addGroupTargetToRole(userId: string, roleId: string, groupId: string): Promise<Response>;
     /**
      * @description
      * Removes all active identity provider sessions. This forces the user to authenticate on
      * the next operation. Optionally revokes OpenID Connect and OAuth refresh and access tokens issued to the user.
      */
-    endAllUserSessions(userId: string, queryParameters?: any): Request;
+    endAllUserSessions(userId: string, queryParameters?: any): Promise<Response>;
 }
 /**
  * Base client that encapsulates the HTTP request mechanism, and knowledge of how to authenticate with the Okta API
