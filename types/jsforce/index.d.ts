@@ -2,6 +2,7 @@
 // Project: https://github.com/jsforce/jsforce
 // Definitions by: Dolan Miu <https://github.com/dolanmiu>
 //                 Kamil Ejsymont <https://github.com/netes>
+//                 rk-7 <https://github.com/rk-7>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 2.2
 
@@ -12,6 +13,7 @@ import * as glob from 'glob';
 
 export { Date } from './date-enum';
 export { Record } from './record';
+export { OAuth2 } from './oauth2';
 export { RecordResult } from './record-result';
 export { Connection } from './connection';
 export { SObject } from './salesforce-object';

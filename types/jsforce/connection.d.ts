@@ -60,11 +60,15 @@ export type ConnectionEvent = "refresh";
 export interface Connection {
     query<T>(soql: string, callback?: (err: Error, result: QueryResult<T>) => void): Query<QueryResult<T>>;
     sobject<T>(resource: string): SObject<T>;
+    authorize(code: string, callback?: (error: Error, userInfo: UserInfo) => void): Promise<UserInfo>;
 }
 
 export class Connection implements Connection {
     constructor(params: ConnectionOptions)
     accessToken: string;
+    refreshToken: string;
+    instanceUrl: string;
+    authorize(code: string, callback?: (err: Error, res: UserInfo) => void): Promise<UserInfo>;
     login(user: string, password: string, callback?: (err: Error, res: UserInfo) => void): Promise<UserInfo>;
     loginByOAuth2(user: string, password: string, callback?: (err: Error, res: UserInfo) => void): Promise<UserInfo>;
     loginBySoap(user: string, password: string, callback?: (err: Error, res: UserInfo) => void): Promise<UserInfo>;
